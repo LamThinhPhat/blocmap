@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -7,21 +6,16 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc():super(NotLoginState());
-
-  @override
-  Stream<LoginState> mapEventToState(LoginEvent event) async* {
-    if (event is LoginEvent)
-    {
+  LoginBloc():super(NotLoginState()) {
+    on<LoginEvent>((event, emit) {
       if (state is LoginSucessState)
-        yield NotLoginState();
+        emit(NotLoginState());
       if (event.username.length < 5)
-        yield UsernameFailState();
+        emit(UsernameFailState());
       else if (event.password.length < 3)
-        yield PasswordFailState();
+        emit(PasswordFailState());
       else
-        yield LoginSucessState();
-    }
+        emit(LoginSucessState());
+    });
   }
-
 }

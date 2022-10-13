@@ -32,7 +32,7 @@ dependencies:
   cached_network_image: ^3.2.1
   flutter_image:
   flutter_bloc: ^7.0.0
-  bloc: ^7.0.0
+  bloc:
   equatable:
   flutter_map:
   geocoder: ^0.2.1

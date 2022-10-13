@@ -8,47 +8,43 @@ part 'route_event.dart';
 part 'route_state.dart';
 
 class RouteBloc extends Bloc<RouteEvent, RouteState> {
-  RouteBloc() :super(RouteInitial());
-
-  @override
-  Stream<RouteState> mapEventToState(RouteEvent event) async* {
-    if (event is RouteEvent)
+  RouteBloc() :super(RouteInitial()){
+    on<RouteEvent>((event, emit) async {
+      try
       {
-        try
+        if (state is RouteInitial)
         {
-            if (state is RouteInitial)
-            {
-              final routeFromApi = await getRoute(event.startPoint.longitude, event.startPoint.latitude);
-              if (routeFromApi.isEmpty)
-                {
-                  yield RouteFailure();
+          final routeFromApi = await getRoute(event.startPoint.longitude, event.startPoint.latitude);
+          if (routeFromApi.isEmpty)
+          {
+            emit(RouteFailure());
 
-                }
-              else
-                {
-                  yield Routesuccess(routeToDraw: routeFromApi);
-                }
-            }
-            else if (state is Routesuccess)
-            {
-              yield RouteInitial();
-              final routeFromApi = await getRoute(event.startPoint.longitude, event.startPoint.latitude);
-              print(routeFromApi);
-              if (routeFromApi.isEmpty)
-              {
-                yield RouteFailure();
-
-              }
-              else
-              {
-                yield Routesuccess(routeToDraw: routeFromApi);
-              }
-            }
+          }
+          else
+          {
+            emit(Routesuccess(routeToDraw: routeFromApi));
+          }
         }
-        catch(exeption)
+        else if (state is Routesuccess)
         {
-          yield RouteFailure();
+          emit(RouteInitial());
+          final routeFromApi = await getRoute(event.startPoint.longitude, event.startPoint.latitude);
+          print(routeFromApi);
+          if (routeFromApi.isEmpty)
+          {
+            emit(RouteFailure());
+
+          }
+          else
+          {
+            emit(Routesuccess(routeToDraw: routeFromApi));
+          }
         }
       }
+      catch(exeption)
+      {
+        emit(RouteFailure());
+      }
+    });
   }
 }
