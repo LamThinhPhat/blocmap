@@ -1,4 +1,5 @@
 import 'package:blocmap/bloc/loginBloc/login_bloc.dart';
+import 'package:blocmap/route_generator.dart';
 import 'package:blocmap/screens/LoginPage.dart';
 import 'package:blocmap/screens/MapScreen.dart';
 import 'package:flutter/material.dart';
@@ -16,19 +17,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Flutter Demo',
       initialRoute: '/',
-      routes: {
-        '/': (context) => BlocProvider<LoginBloc>(
-          create: (context) => LoginBloc(),
-          child: LoginPage(),
-        ),
-        '/map-screen': (context) => BlocProvider<RouteBloc>(
-          create: (context) => RouteBloc(),
-          child: MapScreen(),
-        )
-      },
+      onGenerateRoute: routeGenerator.generateRoute
     );
   }
 }
